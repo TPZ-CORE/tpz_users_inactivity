@@ -11,8 +11,8 @@ TriggerEvent("getTPZCore", function(cb) TPZ = cb end) -- To get the Core Functio
 -- If the player has not been registered, we register the player and reset the inactivity time.
 -- If the player does exist, and connected again, we replace the source.
 
-RegisterServerEvent("tp_users_inactivity:registerLoggedInData")
-AddEventHandler("tp_users_inactivity:registerLoggedInData", function()
+RegisterServerEvent("tpz_users_inactivity:registerLoggedInData")
+AddEventHandler("tpz_users_inactivity:registerLoggedInData", function()
   local _source         = source
   local xPlayer         = TPZ.GetPlayer(_source)
   local charidentifier  = xPlayer.getCharacterIdentifier()
