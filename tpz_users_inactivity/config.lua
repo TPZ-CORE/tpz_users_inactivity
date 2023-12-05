@@ -32,4 +32,6 @@ Config.BlacklistedUsers = {
 
 Config.RemoveFromDatabaseDataList = {
     { table = "DELETE FROM characters WHERE charidentifier = @charidentifier" },
+    --{ table = "DELETE FROM tp_mailbox_mails_registrations WHERE charidentifier = @charidentifier" }, -- TP Mailbox
+    --{ table = "DELETE FROM tp_mailbox_mails WHERE receiver_charidentifier = @charidentifier" }, -- TP Mailbox
 }
