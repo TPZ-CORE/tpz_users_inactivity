@@ -20,7 +20,7 @@ AddEventHandler("tp_users_inactivity:registerLoggedInData", function()
   RegisterConnectedPlayer(charidentifier)
 
   local Parameters = { ['charidentifier'] = charidentifier, ['inactivity_time'] = 0 }
-  exports.ghmattimysql:execute("UPDATE users SET inactivity_time = @inactivity_time WHERE charidentifier = @charidentifier", Parameters)
+  exports.ghmattimysql:execute("UPDATE characters SET inactivity_time = @inactivity_time WHERE charidentifier = @charidentifier", Parameters)
 
 end)
 
