@@ -14,8 +14,7 @@ Config.Webhooking = {
 -- Updating every x minutes the players who are not online in `users` table.
 -- When someone logs in (does not matter what selected character will be), the time sets back to `0`.
 -- When someone is not logged in, the time updating will be added on the players `users` table.
-Config.TimeUpdatingInDatabase = 15 
-
+Config.TimeUpdatingInDatabase  = 15 
 Config.RemoveDatabaseDataAfter = 60 -- The time is in days, if a user has equal or higher than this number, all data will be deleted.
 
 -- Blacklisted roles won't have any time updating.
