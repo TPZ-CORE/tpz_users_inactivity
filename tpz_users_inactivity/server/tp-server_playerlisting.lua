@@ -23,7 +23,6 @@ function RegisterConnectedPlayer(charidentifier)
 
     if ConnectedPlayers[charidentifier] == nil then
 
-        ConnectedPlayers[charidentifier]                 = {}
-        ConnectedPlayers[charidentifier].charidentifier  = charidentifier
+        ConnectedPlayers[charidentifier] = true
     end
 end
