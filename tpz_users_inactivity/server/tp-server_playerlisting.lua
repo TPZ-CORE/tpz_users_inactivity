@@ -10,7 +10,6 @@ AddEventHandler('onResourceStop', function(resourceName)
     end
 
     ConnectedPlayers = {}
-
 end)
 
 -----------------------------------------------------------
