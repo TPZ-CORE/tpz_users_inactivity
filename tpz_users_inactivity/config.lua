@@ -31,6 +31,11 @@ Config.BlacklistedUsers = {
     'steam:xxxxxxxxxxxxxxx',
 }
 
+-- The system removes an inactive character not all characters
+-- If a user has 2 characters and for over 3 months the second character
+-- havent been played, this is the character that is going to be deleted.
+-- (!) ON DELETE, ALWAYS CHECK FOR CHARIDENTIFIER ONLY AS THE EXAMPLE BELOW!
+
 Config.RemoveFromDatabaseDataList = {
     { table = "DELETE FROM characters WHERE charidentifier = @charidentifier" },
     --{ table = "DELETE FROM tp_mailbox_mails_registrations WHERE charidentifier = @charidentifier" }, -- TP Mailbox
