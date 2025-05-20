@@ -18,4 +18,6 @@
 
 - Supports Group roles to prevent users who are administrators, moderators to be removed for inactivity. 
 
+- Supports Steam Identifiers to prevent users who are listed to be removed for inactivity. 
+
 - There is a possibility on the configuration file to remove - delete multiple database tables for cleaning more data than only removing a user from characters table (such as removing data from passportd, leveling, mailbox, stables, etc).
