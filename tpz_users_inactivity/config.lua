@@ -37,7 +37,5 @@ Config.BlacklistedUsers = {
 -- (!) ON DELETE, ALWAYS CHECK FOR CHARIDENTIFIER ONLY AS THE EXAMPLE BELOW!
 
 Config.RemoveFromDatabaseDataList = {
-    { table = "DELETE FROM characters WHERE charidentifier = @charidentifier" },
-    --{ table = "DELETE FROM tp_mailbox_mails_registrations WHERE charidentifier = @charidentifier" }, -- TP Mailbox
-    --{ table = "DELETE FROM tp_mailbox_mails WHERE receiver_charidentifier = @charidentifier" }, -- TP Mailbox
+    --{ table = "DELETE FROM characters WHERE charidentifier = @charidentifier" }, -- EXAMPLE ONLY! THIS DATABASE TABLE (characters) IS EXECUTED FROM SYSTEM ITSELF. 
 }
