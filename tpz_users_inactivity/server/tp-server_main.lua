@@ -123,7 +123,7 @@ Citizen.CreateThread(function()
 
               -- DELETE ALL CHARACTERS AND RESET USER.
               exports.ghmattimysql:execute("DELETE FROM `characters` WHERE `identifier` = @identifier", UserParameters)
-              exports.ghmattimysql:execute("UPDATE `users` SET `inactivity_time` = -1 WHERE `identifier` = @identifier", { ['identifier'] = identifier }) -- SETS THE USER AS ALREADY CHARS REMOVE FOR PREVENTING ERRORS.
+              exports.ghmattimysql:execute("UPDATE `users` SET `inactivity_time` = -1 WHERE `identifier` = @identifier", UserParameters) -- SETS THE USER AS ALREADY CHARS REMOVE FOR PREVENTING ERRORS.
 
               if Config.Debug then
                 print(" [!] The following player was inactive for too long, we deleted all data from: " .. identifier)
