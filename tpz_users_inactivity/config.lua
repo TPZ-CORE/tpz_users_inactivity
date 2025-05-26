@@ -2,9 +2,9 @@ Config = {}
 
 Config.Debug = true
 
----------------------- INFORMATION ----------------------
--- The system reads the users directly from `characters` table,
----------------------------------------------------------
+---------------------- INFORMATION ------------------------
+-- The system reads the users directly from `users` table.
+-----------------------------------------------------------
 
 Config.Webhooking = { 
     Enable = true, 
@@ -18,24 +18,14 @@ Config.Webhooking = {
 Config.TimeUpdatingInDatabase  = 15 
 Config.RemoveDatabaseDataAfter = 90 -- The time is in days, if a user has equal or higher than this number, all data will be deleted.
 
--- Blacklisted roles won't have any time updating.
-Config.BlacklistedGroupRoles = { 
-    'admin',
-    'mod',
-    'moderator',
-    'staff',
-}
-
 -- Blacklisted users won't have any time updating / counting (in case someone is going to be off for personal reasons).
 Config.BlacklistedUsers = {
     'steam:xxxxxxxxxxxxxxx',
 }
 
--- The system removes an inactive character not all characters
--- If a user has 2 characters and for over 3 months the second character
--- havent been played, this is the character that is going to be deleted.
--- (!) ON DELETE, ALWAYS CHECK FOR CHARIDENTIFIER ONLY AS THE EXAMPLE BELOW!
+-- The system removes all characters from an inactive user.
+-- (!) ON DELETE, ALWAYS CHECK FOR IDENTIFIER (STEAM HEX) ONLY AS THE EXAMPLE BELOW!
 
 Config.RemoveFromDatabaseDataList = {
-    --{ table = "DELETE FROM characters WHERE charidentifier = @charidentifier" }, -- EXAMPLE ONLY! THIS DATABASE TABLE (characters) IS EXECUTED FROM SYSTEM ITSELF. 
+    --{ table = "DELETE FROM characters WHERE identifier = @identifier" }, -- EXAMPLE ONLY! THIS DATABASE TABLE (characters) IS EXECUTED FROM SYSTEM ITSELF. 
 }
