@@ -32,7 +32,7 @@ AddEventHandler('onResourceStop', function(resourceName)
     return
   end
 
-  ConnectedPlayers = {}
+  ConnectedPlayers = nil
 end)
 
 -----------------------------------------------------------
