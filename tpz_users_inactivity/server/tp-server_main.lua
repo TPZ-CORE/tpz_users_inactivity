@@ -5,28 +5,9 @@ local ConnectedPlayers = {}
 --[[ Local Functions  ]]--
 -----------------------------------------------------------
 
--- @GetTableLength returns the length of a table.
-local function GetTableLength(T)
-  local count = 0
-  for _ in pairs(T) do count = count + 1 end
-  return count
-end
+local IsPlayerBlacklisted = function(currentIdentifier)
 
-local IsPlayerBlacklisted = function(currentIdentifier, currentGroup)
-
-  if Config.BlacklistedGroupRoles and GetTableLength(Config.BlacklistedGroupRoles) > 0 then
-
-    for index, group in pairs (Config.BlacklistedGroupRoles) do
-
-      if group == currentGroup then
-        return true
-      end
-
-    end
-
-  end
-
-  if Config.BlacklistedUsers and GetTableLength(Config.BlacklistedUsers) > 0 then
+  if Config.BlacklistedUsers and TPZ.GetTableLength(Config.BlacklistedUsers) > 0 then
 
     for index, user in pairs (Config.BlacklistedUsers) do
 
@@ -54,23 +35,6 @@ AddEventHandler('onResourceStop', function(resourceName)
   ConnectedPlayers = {}
 end)
 
-AddEventHandler('playerDropped', function (reason)
-  local _source         = source
-  local xPlayer         = TPZ.GetPlayer(_source)
-
-  if not xPlayer.loaded() then 
-    return
-  end
-
-  local charidentifier  = xPlayer.getCharacterIdentifier()
-
-  -- Even if the list does not container the charId, it will not cause any errors.
-  -- Not need to check for ~= nil.
-  ConnectedPlayers[charidentifier] = nil
- 
-end)
-
-
 -----------------------------------------------------------
 --[[ General Events  ]]--
 -----------------------------------------------------------
@@ -81,23 +45,22 @@ end)
 
 RegisterServerEvent("tpz_users_inactivity:registerLoggedInData")
 AddEventHandler("tpz_users_inactivity:registerLoggedInData", function()
-  local _source         = source
-  local xPlayer         = TPZ.GetPlayer(_source)
+  local _source = source
+  local xPlayer = TPZ.GetPlayer(_source)
 
-  local charidentifier  = xPlayer.getCharacterIdentifier()
+  if not xPlayer.loaded() then 
+    return
+  end
 
-  if not ConnectedPlayers[charidentifier] then
-    ConnectedPlayers[charidentifier] = true
+  local identifier = xPlayer.getIdentifier()
+
+  if not ConnectedPlayers[identifier] then
+    ConnectedPlayers[identifier] = true
 
     -- We don't want to update every time the player joins, if the server restart, the ConnectedPlayers list will reset eitherway
     -- The player will not be deleted for few hours or even a day since the configuration is always more than that.
     -- It will be updated on every restart just once if the player joins, no need to update it more.
-    local Parameters = { 
-      ['charidentifier']  = charidentifier, 
-      ['inactivity_time'] = 0 
-    }
-  
-    exports.ghmattimysql:execute("UPDATE `characters` SET `inactivity_time` = @inactivity_time WHERE `charidentifier` = @charidentifier", Parameters)
+    exports.ghmattimysql:execute("UPDATE `users` SET `inactivity_time` = 0 WHERE `identifier` = @identifier",  { ['identifier']  = identifier })
   
   end
 
@@ -111,31 +74,28 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(60000 * Config.TimeUpdatingInDatabase)
 
-    exports.ghmattimysql:execute("SELECT * FROM characters", {}, function(charResult)
+    exports.ghmattimysql:execute("SELECT * FROM users", {}, function(charResult)
 
       for index, character in pairs (charResult) do
 
-        local identifier       = charResult[index].identifier
-        local charidentifier   = charResult[index].charidentifier
-        local steamName        = charResult[index].steamname
-
-        local group            = charResult[index].group
-        local inactivity_time  = charResult[index].inactivity_time
+        local identifier       = character.identifier
+        local steamName        = character.steamname
+        local inactivity_time  = character.inactivity_time
 
         local playerExists     = false
 
-        local IsPlayerBlacklisted = IsPlayerBlacklisted(identifier, group)
+        local IsPlayerBlacklisted = IsPlayerBlacklisted(identifier)
 
-        if not IsPlayerBlacklisted then
+        if not IsPlayerBlacklisted and inactivity_time ~= -1 then
 
-          if ConnectedPlayers[tonumber(charidentifier)] then
+          if ConnectedPlayers[identifier] then
             playerExists = true
           end
 
           if not playerExists then
 
-            local Parameters = { ['charidentifier'] = charidentifier, ['inactivity_time'] = Config.TimeUpdatingInDatabase }
-            exports.ghmattimysql:execute("UPDATE characters SET inactivity_time = inactivity_time + @inactivity_time WHERE charidentifier = @charidentifier", Parameters)
+            local Parameters = { ['identifier'] = identifier, ['inactivity_time'] = Config.TimeUpdatingInDatabase }
+            exports.ghmattimysql:execute("UPDATE `users` SET `inactivity_time` = `inactivity_time` + @inactivity_time WHERE `identifier` = @identifier", Parameters)
 
             inactivity_time = inactivity_time + Config.TimeUpdatingInDatabase
 
@@ -145,7 +105,7 @@ Citizen.CreateThread(function()
 
               local finished = false
 
-              local UserParameters = { ['charidentifier'] = charidentifier }
+              local UserParameters = { ['identifier'] = identifier }
 
               for _, database in pairs(Config.RemoveFromDatabaseDataList) do
                
@@ -161,17 +121,19 @@ Citizen.CreateThread(function()
                 Wait(250)
               end
 
-              exports.ghmattimysql:execute("DELETE FROM `characters` WHERE `charidentifier` = @charidentifier ", UserParameters)
+              -- DELETE ALL CHARACTERS AND RESET USER.
+              exports.ghmattimysql:execute("DELETE FROM `characters` WHERE `identifier` = @identifier", UserParameters)
+              exports.ghmattimysql:execute("UPDATE `users` SET `inactivity_time` = -1 WHERE `identifier` = @identifier", { ['identifier'] = identifier }) -- SETS THE USER AS ALREADY CHARS REMOVE FOR PREVENTING ERRORS.
 
               if Config.Debug then
-                print(" [!] The following player was inactive for too long, we deleted all data from: " .. charidentifier)
+                print(" [!] The following player was inactive for too long, we deleted all data from: " .. identifier)
               end
 
               local webhookData = Config.Webhooking
 
               if webhookData.Enable then
-                  local title   = "🗑️` A Character has been permanently removed due to inactivity.`"
-                  local message = "**Steam name: **`" .. steamName .. "`**\nIdentifier: **`" .. identifier .. " (Char: " .. charidentifier .. ") `"
+                  local title   = "🗑️` All Characters and the configured data have been permanently removed due to inactivity.`"
+                  local message = "**Steam name: **`" .. steamName .. "`**\nIdentifier: **`" .. identifier ..`"
                
                   TPZ.SendToDiscord(webhookData.Url, title, message, webhookData.Color)
               end
