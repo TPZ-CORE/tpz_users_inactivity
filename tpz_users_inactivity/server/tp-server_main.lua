@@ -133,7 +133,7 @@ Citizen.CreateThread(function()
 
               if webhookData.Enable then
                   local title   = "🗑️` All Characters and the configured data have been permanently removed due to inactivity.`"
-                  local message = "**Steam name: **`" .. steamName .. "`**\nIdentifier: **`" .. identifier ..`"
+                  local message = "**Steam name: **`" .. steamName .. "`**\nIdentifier: **`" .. identifier .. "`"
                
                   TPZ.SendToDiscord(webhookData.Url, title, message, webhookData.Color)
               end
