@@ -28,5 +28,6 @@ Config.BlacklistedUsers = {
 -- (!) ON DELETE, ALWAYS CHECK FOR IDENTIFIER (STEAM HEX) ONLY AS THE EXAMPLE BELOW!
 
 Config.RemoveFromDatabaseDataList = {
-    --{ table = "DELETE FROM characters WHERE identifier = @identifier" }, -- EXAMPLE ONLY! THIS DATABASE TABLE (characters) IS EXECUTED FROM SYSTEM ITSELF. 
+    { table = "DELETE FROM horses WHERE identifier = @identifier" },
+    { table = "DELETE FROM wagons WHERE identifier = @identifier" },
 }
