@@ -17,6 +17,7 @@ Config.Webhooking = {
 -- When someone is not logged in, the time updating will be added on the players `users` table.
 Config.TimeUpdatingInDatabase  = 15 
 Config.RemoveDatabaseDataAfter = 90 -- The time is in days, if a user has equal or higher than this number, all data will be deleted.
+Config.NotifyAbsenceEvery      = 30 -- The time in days, to notify (send webhook) the server for a player absence every x time. 
 
 -- Blacklisted users won't have any time updating / counting (in case someone is going to be off for personal reasons).
 Config.BlacklistedUsers = {
