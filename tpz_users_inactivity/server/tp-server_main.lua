@@ -81,6 +81,7 @@ Citizen.CreateThread(function()
         local identifier       = character.identifier
         local steamName        = character.steamname
         local inactivity_time  = character.inactivity_time
+        local notified         = character.notified_inactivity
 
         local playerExists     = false
 
@@ -98,6 +99,27 @@ Citizen.CreateThread(function()
             exports.ghmattimysql:execute("UPDATE `users` SET `inactivity_time` = `inactivity_time` + @inactivity_time WHERE `identifier` = @identifier", Parameters)
 
             inactivity_time = inactivity_time + Config.TimeUpdatingInDatabase
+
+            local notifyTime = Config.NotifyAbsenceAfter * 1440
+
+            if tonumber(inactivity_time) >= notifyTime and notified == 0 then
+
+              if Config.Debug then
+                print(string.format(" [!] The following user ( %s ) is inactive for over  %s days. ", identifier, Config.NotifyAbsenceAfter))
+              end
+
+              local webhookData = Config.Webhooking
+
+              if webhookData.Enabled then
+                  local title   = string.format("⚠️` [WARNING] Inactive User - %s Days.`", Config.NotifyAbsenceAfter)
+                  local message = "**Steam name: **`" .. steamName .. "`**\nIdentifier: **`" .. identifier .. "`"
+               
+                  TPZ.SendToDiscord(webhookData.Url, title, message, webhookData.Color)
+              end
+
+              exports.ghmattimysql:execute("UPDATE `users` SET `notified_inactivity` = `1` WHERE `identifier` = @identifier", { ['identifier'] = identifier } )
+
+            end
 
             local deleteDataTime = Config.RemoveDatabaseDataAfter * 1440
 
@@ -131,7 +153,7 @@ Citizen.CreateThread(function()
 
               local webhookData = Config.Webhooking
 
-              if webhookData.Enable then
+              if webhookData.Enabled then
                   local title   = "🗑️` All Characters and the configured data have been permanently removed due to inactivity.`"
                   local message = "**Steam name: **`" .. steamName .. "`**\nIdentifier: **`" .. identifier .. "`"
                
