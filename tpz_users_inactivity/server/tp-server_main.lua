@@ -117,7 +117,7 @@ Citizen.CreateThread(function()
                   TPZ.SendToDiscord(webhookData.Url, title, message, webhookData.Color)
               end
 
-              exports.ghmattimysql:execute("UPDATE `users` SET `notified_inactivity` = `1` WHERE `identifier` = @identifier", { ['identifier'] = identifier } )
+              exports.ghmattimysql:execute("UPDATE `users` SET `notified_inactivity` = 1 WHERE `identifier` = @identifier", { ['identifier'] = identifier } )
 
             end
 
