@@ -30,4 +30,6 @@ Config.BlacklistedUsers = {
 Config.RemoveFromDatabaseDataList = {
     { table = "DELETE FROM horses WHERE identifier = @identifier" },
     { table = "DELETE FROM wagons WHERE identifier = @identifier" },
+    { table = "DELETE FROM passports WHERE identifier = @identifier" },
+    { table = "DELETE FROM bank_accounts WHERE identifier = @identifier" },
 }
