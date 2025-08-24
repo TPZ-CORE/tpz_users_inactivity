@@ -7,7 +7,7 @@ Config.Debug = true
 -----------------------------------------------------------
 
 Config.Webhooking = { 
-    Enable = true, 
+    Enabled = true, 
     Url = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", -- The discord webhook url.
     Color = 10038562,
 }
@@ -33,3 +33,4 @@ Config.RemoveFromDatabaseDataList = {
     { table = "DELETE FROM passports WHERE identifier = @identifier" },
     { table = "DELETE FROM bank_accounts WHERE identifier = @identifier" },
 }
+
