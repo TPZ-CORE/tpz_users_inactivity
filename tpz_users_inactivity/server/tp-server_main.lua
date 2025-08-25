@@ -60,7 +60,7 @@ AddEventHandler("tpz_users_inactivity:registerLoggedInData", function()
     -- We don't want to update every time the player joins, if the server restart, the ConnectedPlayers list will reset eitherway
     -- The player will not be deleted for few hours or even a day since the configuration is always more than that.
     -- It will be updated on every restart just once if the player joins, no need to update it more.
-    exports.ghmattimysql:execute("UPDATE `users` SET `inactivity_time` = 0, `notified_inactivity` = 0, WHERE `identifier` = @identifier",  { ['identifier']  = identifier })
+    exports.ghmattimysql:execute("UPDATE `users` SET `inactivity_time` = 0, `notified_inactivity` = 0 WHERE `identifier` = @identifier",  { ['identifier']  = identifier })
   
   end
 
