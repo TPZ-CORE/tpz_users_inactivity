@@ -113,8 +113,8 @@ Citizen.CreateThread(function()
               if webhookData.Enabled then
                   local title   = string.format("⚠️` [WARNING] Inactive User - %s Days.`", Config.NotifyAbsenceAfter)
                   local message = "**Steam name: **`" .. steamName .. "`**\nIdentifier: **`" .. identifier .. "`"
-               
-                  TPZ.SendToDiscord(webhookData.Url, title, message, webhookData.Color)
+                  local url = TPZ.GetWebhookUrl('tpz_users_inactivity', 'ALL')
+                  TPZ.SendToDiscord(url, title, message, webhookData.Color)
               end
 
               exports.ghmattimysql:execute("UPDATE `users` SET `notified_inactivity` = 1 WHERE `identifier` = @identifier", { ['identifier'] = identifier } )
@@ -156,8 +156,8 @@ Citizen.CreateThread(function()
               if webhookData.Enabled then
                   local title   = "🗑️` All Characters and the configured data have been permanently removed due to inactivity.`"
                   local message = "**Steam name: **`" .. steamName .. "`**\nIdentifier: **`" .. identifier .. "`"
-               
-                  TPZ.SendToDiscord(webhookData.Url, title, message, webhookData.Color)
+                  local url = TPZ.GetWebhookUrl('tpz_users_inactivity', 'ALL')
+                  TPZ.SendToDiscord(url, title, message, webhookData.Color)
               end
 
             end
@@ -173,4 +173,5 @@ Citizen.CreateThread(function()
 	end
 
 end)
+
 
