@@ -6,9 +6,9 @@ Config.Debug = true
 -- The system reads the users directly from `users` table.
 -----------------------------------------------------------
 
+-- (!) Checkout tpz_core/server/discord/webhooks.lua to modify the webhook urls.
 Config.Webhooking = { 
     Enabled = true, 
-    Url = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", -- The discord webhook url.
     Color = 10038562,
 }
 
@@ -33,4 +33,5 @@ Config.RemoveFromDatabaseDataList = {
     { table = "DELETE FROM passports WHERE identifier = @identifier" },
     { table = "DELETE FROM bank_accounts WHERE identifier = @identifier" },
 }
+
 
